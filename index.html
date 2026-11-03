@@ -63,25 +63,38 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        /* Список лабораторных */
+        /* Блок со списком лабораторных (КНОПКИ) */
         .labs-list {
             margin-top: 40px;
-            text-align: left;
-            display: inline-block;
-        }
-
-        .labs-list p {
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Расстояние между кнопками */
         }
 
         .labs-list a {
-            color: #333;
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            background-color: #f8f9fa; /* Светло-серый фон */
+            border: 1px solid #d0d0d0; /* Рамка */
+            border-radius: 8px; /* Закругленные углы */
+            color: #333333;
             text-decoration: none;
             font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease; /* Плавный эффект при наведении */
+            box-sizing: border-box;
         }
 
+        /* Эффект при наведении на кнопку */
         .labs-list a:hover {
-            color: #0056b3;
+            background-color: #0056b3;
+            color: #ffffff;
+            border-color: #0056b3;
+            transform: translateY(-2px); /* Легкое поднятие */
+            box-shadow: 0 4px 8px rgba(0, 86, 179, 0.2);
         }
 
         /* Футер */
@@ -104,7 +117,7 @@
 
     <!-- Меню сверху -->
     <div class="navbar">
-        <a href="#">Главная</a>
+        <a href="index.html">Главная</a>
         <a href="#">Контакты</a>
     </div>
 
@@ -113,8 +126,9 @@
         <h1>Добро пожаловать!</h1>
         <p>Сайт по теории информации</p>
         
-        <!-- Замените photo.jpg на имя вашего файла с фото -->
+        <!-- Фото -->
         <div style="margin: 30px 0;">
+            <!-- Обратите внимание: пробелы в имени файла лучше заменить на подчеркивания (photo.jpeg) -->
             <img src="photo_2026-11-03 13.42.06.jpeg" alt="Фото Ольги Шашко" class="profile-photo">
         </div>
 
@@ -124,13 +138,13 @@
         <p>Группа:</p>
         <p style="font-size: 20px; font-weight: bold; margin-bottom: 40px;">1451</p>
 
-        <!-- Ссылки на лабораторные (если у вас есть PDF файлы, загрузите их и поменяйте ссылки) -->
+        <!-- Ссылки на лабораторные в виде кнопок -->
         <div class="labs-list">
-            <p><a href="#">Лабораторная 1</a></p>
-            <p><a href="#">Лабораторная 2</a></p>
-            <p><a href="#">Лабораторная 3</a></p>
-            <p><a href="#">Лабораторная 4</a></p>
-            <p><a href="#">Handouts</a></p>
+            <a href="lab1.html">Лабораторная 1 (калькулятор факториала)</a>
+            <a href="#">Лабораторная 2 (булевы операции)</a>
+            <a href="#">Лабораторная 3 (код Хэмминга)</a>
+            <a href="#">Лабораторная 4 (мера информации)</a>
+            <a href="#">Handouts</a>
         </div>
 
         <!-- Подвал -->
