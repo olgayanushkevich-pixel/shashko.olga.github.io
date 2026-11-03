@@ -3,21 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Код Хэмминга (7,4)</title>
+    <title>Код Хэмминга (Диаграмма)</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #333333; }
-        .navbar { background-color: #f8f9fa; padding: 15px 30px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 20px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
+        .navbar { background-color: #ffffff; padding: 15px 30px; border-bottom: 1px solid #ddd; display: flex; gap: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .navbar a { text-decoration: none; color: #0056b3; font-weight: bold; font-size: 16px; }
-        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
-        h1 { font-size: 28px; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; font-size: 18px; }
-        input[type="text"] { padding: 8px; font-size: 16px; width: 200px; margin-left: 10px; letter-spacing: 2px; }
-        button { padding: 10px 20px; font-size: 16px; background-color: #e0e0e0; border: 1px solid #ccc; cursor: pointer; border-radius: 4px; margin-top: 10px; margin-right: 10px; }
-        button:hover { background-color: #d0d0d0; }
-        .result { margin-top: 30px; font-size: 18px; display: none; line-height: 1.6; }
-        .back-link { display: inline-block; margin-top: 40px; color: #0056b3; text-decoration: none; font-size: 16px; }
-        .footer { margin-top: 60px; font-size: 14px; color: #666; border-top: 1px solid #eee; padding-top: 20px; text-align: center; }
-        .highlight { color: #d9534f; font-weight: bold; }
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+        h1 { font-size: 26px; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 20px; }
+        
+        /* Контейнер для SVG */
+        .diagram-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Стили для кликабельных битов внутри диаграммы */
+        .bit-circle {
+            cursor: pointer;
+            transition: fill 0.2s;
+        }
+        .bit-circle:hover {
+            fill: #e0e0e0;
+        }
+        .bit-text {
+            font-size: 18px;
+            font-weight: bold;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Блок результатов */
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            font-size: 18px;
+            display: none;
+        }
+        .result-box strong { color: #0056b3; }
+        
+        .back-link { display: inline-block; margin-top: 30px; color: #0056b3; text-decoration: none; font-weight: bold; }
+        .footer { margin-top: 40px; font-size: 13px; color: #999; border-top: 1px solid #eee; padding-top: 15px; }
     </style>
 </head>
 <body>
@@ -28,97 +59,153 @@
     </div>
 
     <div class="container">
-        <h1>Код Хэмминга (7,4)</h1>
-        <p>Кодирование 4 бит данных в 7 бит и исправление одиночных ошибок.</p>
+        <h1>Код Хэмминга</h1>
+        <p>Нажмите на любой бит на диаграмме, чтобы изменить его (0 или 1). Программа автоматически найдет ошибку.</p>
         
-        <div class="form-group">
-            <label for="data">Введите 4 бита (например, 1011):</label>
-            <input type="text" id="data" maxlength="4" value="1011">
-        </div>
-        
-        <button onclick="encodeHamming()">Закодировать</button>
-        <button onclick="decodeHamming()" style="background-color: #d9edf7;">Декодировать / Исправить</button>
+        <div class="diagram-container">
+            <!-- Отрисовка диаграммы Венна через SVG -->
+            <svg viewBox="0 0 600 500" width="100%" height="100%">
+                
+                <!-- Круги (полупрозрачные) -->
+                <!-- Верхний круг -->
+                <circle cx="300" cy="180" r="150" fill="#e6f2f8" stroke="#b3d7e9" stroke-width="2"></circle>
+                <!-- Левый круг -->
+                <circle cx="200" cy="320" r="150" fill="#fcecf0" stroke="#f5c2d0" stroke-width="2"></circle>
+                <!-- Правый круг -->
+                <circle cx="400" cy="320" r="150" fill="#ececf6" stroke="#d1d1e9" stroke-width="2"></circle>
 
-        <div class="result" id="result-box">
-            <p><strong>Результат:</strong></p>
-            <div id="steps"></div>
+                <!-- Линии пересечения (для красоты, как на картинке) -->
+                <path d="M 300 330 Q 250 450 200 470" fill="none" stroke="#d1d1e9" stroke-width="2" opacity="0.5"/>
+                <path d="M 300 330 Q 350 450 400 470" fill="none" stroke="#f5c2d0" stroke-width="2" opacity="0.5"/>
+
+                <!-- БИТЫ ДАННЫХ (t) -->
+                
+                <!-- t5 -->
+                <rect x="275" y="100" width="50" height="40" rx="4" fill="#fff" stroke="#999"></rect>
+                <text x="300" y="90" class="bit-text" text-anchor="middle" font-size="14" fill="#555">t5</text>
+                <text id="bit-t5" x="300" y="126" class="bit-text" text-anchor="middle">0</text>
+                <rect x="275" y="100" width="50" height="40" rx="4" fill="transparent" class="bit-circle" onclick="toggleBit('t5')"></rect>
+
+                <!-- t6 -->
+                <rect x="150" y="250" width="50" height="40" rx="4" fill="#fff" stroke="#999"></rect>
+                <text x="175" y="240" class="bit-text" text-anchor="middle" font-size="14" fill="#555">t6</text>
+                <text id="bit-t6" x="175" y="276" class="bit-text" text-anchor="middle">0</text>
+                <rect x="150" y="250" width="50" height="40" rx="4" fill="transparent" class="bit-circle" onclick="toggleBit('t6')"></rect>
+
+                <!-- t7 -->
+                <rect x="400" y="250" width="50" height="40" rx="4" fill="#fff" stroke="#999"></rect>
+                <text x="425" y="240" class="bit-text" text-anchor="middle" font-size="14" fill="#555">t7</text>
+                <text id="bit-t7" x="425" y="276" class="bit-text" text-anchor="middle">0</text>
+                <rect x="400" y="250" width="50" height="40" rx="4" fill="transparent" class="bit-circle" onclick="toggleBit('t7')"></rect>
+
+
+                <!-- ПРОВЕРОЧНЫЕ БИТЫ (s) -->
+                
+                <!-- s1 -->
+                <rect x="210" y="180" width="50" height="40" rx="4" fill="#fff" stroke="#999"></rect>
+                <text x="235" y="170" class="bit-text" text-anchor="middle" font-size="14" fill="#555">s1</text>
+                <text id="bit-s1" x="235" y="206" class="bit-text" text-anchor="middle">0</text>
+                <rect x="210" y="180" width="50" height="40" rx="4" fill="transparent" class="bit-circle" onclick="toggleBit('s1')"></rect>
+
+                <!-- s2 -->
+                <rect x="340" y="180" width="50" height="40" rx="4" fill="#fff" stroke="#999"></rect>
+                <text x="365" y="170" class="bit-text" text-anchor="middle" font-size="14" fill="#555">s2</text>
+                <text id="bit-s2" x="365" y="206" class="bit-text" text-anchor="middle">0</text>
+                <rect x="340" y="180" width="50" height="40" rx="4" fill="transparent" class="bit-circle" onclick="toggleBit('s2')"></rect>
+
+                <!-- s3 -->
+                <rect x="275" y="220" width="50" height="40" rx="4" fill="#fff" stroke="#999"></rect>
+                <text x="300" y="210" class="bit-text" text-anchor="middle" font-size="14" fill="#555">s3</text>
+                <text id="bit-s3" x="300" y="246" class="bit-text" text-anchor="middle">0</text>
+                <rect x="275" y="220" width="50" height="40" rx="4" fill="transparent" class="bit-circle" onclick="toggleBit('s3')"></rect>
+
+                <!-- s4 -->
+                <rect x="275" y="300" width="50" height="40" rx="4" fill="#fff" stroke="#999"></rect>
+                <text x="300" y="290" class="bit-text" text-anchor="middle" font-size="14" fill="#555">s4</text>
+                <text id="bit-s4" x="300" y="326" class="bit-text" text-anchor="middle">0</text>
+                <rect x="275" y="300" width="50" height="40" rx="4" fill="transparent" class="bit-circle" onclick="toggleBit('s4')"></rect>
+            </svg>
+        </div>
+
+        <div class="result-box" id="result-box">
+            <p id="status-text"></p>
+            <p id="error-text"></p>
         </div>
 
         <a href="index.html" class="back-link">← Вернуться на главную</a>
 
         <div class="footer">
-            <p>Web hosting by Somee.com</p>
-            <p>Hosted Windows Virtual Server. 2.5GHz CPU, 2GB RAM, 60GB SSD. Try it now for $1!</p>
+            <p>Web hosting by Somee.com | Hosted Windows Virtual Server</p>
         </div>
     </div>
 
     <script>
-        function encodeHamming() {
-            const input = document.getElementById('data').value;
-            if (input.length !== 4 || !/^[01]+$/.test(input)) {
-                alert("Пожалуйста, введите ровно 4 бита (только 0 и 1).");
-                return;
-            }
+        // Текущее состояние битов
+        let bits = {
+            s1: 0, s2: 0, s3: 0, s4: 0,
+            t5: 0, t6: 0, t7: 0
+        };
 
-            const d = input.split('').map(Number);
-            // Позиции: 1, 2, 3, 4, 5, 6, 7. Биты данных: 3, 5, 6, 7. Проверочные: 1, 2, 4.
-            // d = [d1, d2, d3, d4] -> биты в коде: p1, p2, d1, p4, d2, d3, d4
-            const p1 = d[0] ^ d[1] ^ d[3];
-            const p2 = d[0] ^ d[2] ^ d[3];
-            const p4 = d[1] ^ d[2] ^ d[3];
+        // Инициализация (по умолчанию все нули)
+        updateUI();
 
-            const hammingCode = `${p1}${p2}${d[0]}${p4}${d[1]}${d[2]}${d[3]}`;
-
-            document.getElementById('result-box').style.display = 'block';
-            document.getElementById('steps').innerHTML = `
-                Исходные данные: <b>${input}</b><br>
-                Проверочные биты: p1=${p1}, p2=${p2}, p4=${p4}<br>
-                <b>Закодированное слово:</b> <span style="color:#0056b3; font-size: 20px;">${hammingCode}</span>
-            `;
-            // Обновляем поле ввода для удобства декодирования
-            document.getElementById('data').value = hammingCode;
-            document.getElementById('data').maxLength = 7;
+        // Функция переключения бита (0 -> 1, 1 -> 0)
+        function toggleBit(id) {
+            bits[id] = bits[id] === 0 ? 1 : 0;
+            updateUI();
+            checkHamming();
         }
 
-        function decodeHamming() {
-            const input = document.getElementById('data').value;
-            if (input.length !== 7 || !/^[01]+$/.test(input)) {
-                alert("Для декодирования введите ровно 7 бит (только 0 и 1).");
-                return;
+        // Обновление цифр на экране
+        function updateUI() {
+            for (let key in bits) {
+                document.getElementById('bit-' + key).textContent = bits[key];
+            }
+        }
+
+        // Проверка кода Хэмминга
+        function checkHamming() {
+            // Вычисляем синдромы (проверка на четность)
+            // S1 = t5 + t6 + s1 (должно быть четно)
+            // S2 = t5 + t7 + s2 (должно быть четно)
+            // S3 = t6 + t7 + s3 (должно быть четно)
+            // S4 = s1 + s2 + s3 + s4 (должно быть четно) - общий контроль
+
+            const check1 = (bits.t5 + bits.t6 + bits.s1) % 2;
+            const check2 = (bits.t5 + bits.t7 + bits.s2) % 2;
+            const check3 = (bits.t6 + bits.t7 + bits.s3) % 2;
+            const check4 = (bits.s1 + bits.s2 + bits.s3 + bits.s4) % 2;
+
+            let errorPos = check1 * 1 + check2 * 2 + check3 * 4;
+            let isError = false;
+
+            let statusHtml = "";
+            let errorHtml = "";
+
+            // Если общий синдром нечетный или локальные синдромы указывают на ошибку
+            if (errorPos !== 0 || check4 !== 0) {
+                isError = true;
             }
 
-            const h = input.split('').map(Number);
-            // Синдром
-            const s1 = h[0] ^ h[2] ^ h[4] ^ h[6];
-            const s2 = h[1] ^ h[2] ^ h[5] ^ h[6];
-            const s4 = h[3] ^ h[4] ^ h[5] ^ h[6];
-
-            // Определяем позицию ошибки (1-based index)
-            let errorPos = s1 * 1 + s2 * 2 + s4 * 4;
-            let message = "";
-
-            if (errorPos === 0) {
-                message = "<span style='color: green;'>Ошибок не обнаружено.</span>";
+            if (!isError) {
+                statusHtml = "<strong style='color: green;'>Ошибок не обнаружено. Код верен!</strong>";
             } else {
-                message = `Обнаружена ошибка в позиции: <span class="highlight">${errorPos}</span>`;
-                h[errorPos - 1] = h[errorPos - 1] ^ 1; // Инвертируем бит
+                statusHtml = "<strong style='color: red;'>Обнаружена ошибка!</strong>";
+                
+                // Определяем, какой бит сломан
+                if (errorPos === 1) errorHtml = "Ошибка в бите <b>s1</b> (позиция 1)";
+                else if (errorPos === 2) errorHtml = "Ошибка в бите <b>s2</b> (позиция 2)";
+                else if (errorPos === 3) errorHtml = "Ошибка в бите <b>t5</b> (позиция 3)";
+                else if (errorPos === 4) errorHtml = "Ошибка в бите <b>s3</b> (позиция 4)";
+                else if (errorPos === 5) errorHtml = "Ошибка в бите <b>t6</b> (позиция 5)";
+                else if (errorPos === 6) errorHtml = "Ошибка в бите <b>t7</b> (позиция 6)";
+                else if (errorPos === 7) errorHtml = "Ошибка в бите <b>s4</b> (позиция 7)";
+                else errorHtml = "Множественная ошибка (более 1 бита).";
             }
-
-            const correctCode = h.join('');
-            // Извлекаем данные (позиции 3, 5, 6, 7 -> индексы 2, 4, 5, 6)
-            const dataBits = `${h[2]}${h[4]}${h[5]}${h[6]}`;
 
             document.getElementById('result-box').style.display = 'block';
-            document.getElementById('steps').innerHTML = `
-                Введенный код: ${input}<br>
-                ${message}<br>
-                Исправленный код: <span style="color:#0056b3;">${correctCode}</span><br>
-                <b>Декодированные данные:</b> <span style="color: green; font-size: 20px;">${dataBits}</span>
-            `;
-            
-            // Сбрасываем поле для нового ввода
-            document.getElementById('data').value = dataBits;
-            document.getElementById('data').maxLength = 4;
+            document.getElementById('status-text').innerHTML = statusHtml;
+            document.getElementById('error-text').innerHTML = errorHtml;
         }
     </script>
 </body>
