@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор факториала</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        .navbar {
+            background-color: #f8f9fa;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 20px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        input[type="number"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 100px;
+            margin-left: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #d0d0d0;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 20px;
+        }
+        .calc-steps {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: #0056b3;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .footer {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html">Главная</a>
+        <a href="#">Контакты</a>
+    </div>
+
+    <div class="container">
+        <h1>Калькулятор факториала</h1>
+        <p>Вычисление: количество гласных! × количество согласных!</p>
+        
+        <div class="form-group">
+            <label for="vowels">Количество гласных (Vowels):</label>
+            <input type="number" id="vowels" min="0" value="3">
+        </div>
+        <div class="form-group">
+            <label for="consonants">Количество согласных (Consonants):</label>
+            <input type="number" id="consonants" min="0" value="4">
+        </div>
+        
+        <button onclick="calculate()">Вычислить</button>
+
+        <div class="result" id="result-box" style="display: none;">
+            <p><strong>Результат:</strong></p>
+            <p id="main-result"></p>
+            <div class="calc-steps" id="steps"></div>
+        </div>
+
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+
+        <div class="footer">
+            <p>Web hosting by Somee.com</p>
+            <p>Hosted Windows Virtual Server. 2.5GHz CPU, 2GB RAM, 60GB SSD. Try it now for $1!</p>
+            <p>Web hosting by Somee.com</p>
+        </div>
+    </div>
+
+    <script>
+        // Функция для вычисления факториала
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function calculate() {
+            const v = parseInt(document.getElementById('vowels').value) || 0;
+            const c = parseInt(document.getElementById('consonants').value) || 0;
+
+            const factV = factorial(v);
+            const factC = factorial(c);
+            const total = factV * factC;
+
+            // Отображаем результаты
+            document.getElementById('result-box').style.display = 'block';
+            document.getElementById('main-result').innerHTML = `${v}! × ${c}!<br>= ${total}`;
+            document.getElementById('steps').innerHTML = `${v}! = ${factV}<br>${c}! = ${factC}`;
+        }
+    </script>
+</body>
+</html>
