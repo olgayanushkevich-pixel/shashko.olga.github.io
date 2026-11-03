@@ -3,278 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторные работы - Ольга Шашко</title>
+    <title>Сайт по теории информации</title>
     <style>
-        /* Базовые стили для всей страницы */
+        /* Базовые стили */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #ffffff;
             color: #333333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
         }
 
-        /* Заголовок страницы */
-        header {
-            width: 100%;
-            text-align: center;
-            padding: 40px 20px 20px;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #222;
-            margin: 0;
-        }
-
-        /* Блок с фотографией */
-        .profile-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        /* Маленькое круглое фото */
-        .profile-photo {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%; /* Делает фото круглым */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            margin-bottom: 15px;
-        }
-
-        .profile-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: #222;
-            margin: 0;
-        }
-
-        /* Блок с контактными данными */
-        .contact-info {
-            width: 100%;
-            max-width: 600px;
-            padding: 0 20px;
-            box-sizing: border-box;
-            text-align: left;
-            margin-bottom: 80px; /* Отступ снизу, чтобы не перекрывалось баннером */
-        }
-
-        .contact-info h2 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+        /* Верхнее меню */
+        .navbar {
+            background-color: #f8f9fa;
+            padding: 15px 30px;
             border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 20px;
         }
 
-        .contact-info ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .contact-info li {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #444;
-        }
-
-        .contact-info a {
-            color: #444;
+        .navbar a {
             text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+            font-size: 16px;
         }
 
-        .contact-info a:hover {
+        .navbar a:hover {
             text-decoration: underline;
         }
 
-        /* Нижняя панель (как на скриншоте) */
-        .footer-banner {
-            width: 100%;
-            background-color: #333;
-            color: #fff;
+        /* Основной контент по центру */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
             text-align: center;
-            padding: 15px;
-            font-size: 16px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            z-index: 10;
+        }
+
+        .container h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .container p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        /* Фото */
+        .profile-photo {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 50%; /* Делает фото круглым */
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Список лабораторных */
+        .labs-list {
+            margin-top: 40px;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .labs-list p {
+            margin-bottom: 15px;
+        }
+
+        .labs-list a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .labs-list a:hover {
+            color: #0056b3;
+        }
+
+        /* Футер */
+        .footer {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: #666;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Лабораторные работы по теории информации</h1>
-    </header>
-
-    <div class="profile-section">
-        <!-- ВАЖНО: Замените '<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторные работы - Ольга Шашко</title>
-    <style>
-        /* Базовые стили для всей страницы */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            color: #333333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Заголовок страницы */
-        header {
-            width: 100%;
-            text-align: center;
-            padding: 40px 20px 20px;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #222;
-            margin: 0;
-        }
-
-        /* Блок с фотографией */
-        .profile-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        /* Маленькое круглое фото */
-        .profile-photo {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%; /* Делает фото круглым */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            margin-bottom: 15px;
-        }
-
-        .profile-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: #222;
-            margin: 0;
-        }
-
-        /* Блок с контактными данными */
-        .contact-info {
-            width: 100%;
-            max-width: 600px;
-            padding: 0 20px;
-            box-sizing: border-box;
-            text-align: left;
-            margin-bottom: 80px; /* Отступ снизу, чтобы не перекрывалось баннером */
-        }
-
-        .contact-info h2 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .contact-info ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .contact-info li {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #444;
-        }
-
-        .contact-info a {
-            color: #444;
-            text-decoration: none;
-        }
-
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
-
-        /* Нижняя панель (как на скриншоте) */
-        .footer-banner {
-            width: 100%;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 15px;
-            font-size: 16px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>Лабораторные работы по теории информации</h1>
-    </header>
-
-    <div class="profile-section">
-        <img src="photo_2026-11-03 13.42.06.jpg" alt="Фото Ольги Шашко" class="profile-photo">
-        <h2 class="profile-name">Ольга Шашко</h2>
+    <!-- Меню сверху -->
+    <div class="navbar">
+        <a href="#">Главная</a>
+        <a href="#">Контакты</a>
     </div>
 
-    <div class="contact-info">
-        <h2>Мои данные</h2>
-        <ul>
-            <li><a href="tel:+375291112233">+375 29 111-22-33</a></li>
-            <li><a href="mailto:olga.shashko@gmail.com">olga.shashko@gmail.com</a></li>
-            <li>tg: <a href="https://t.me/shashko" target="_blank">@shashko</a></li>
-        </ul>
-    </div>
+    <!-- Основной контент -->
+    <div class="container">
+        <h1>Добро пожаловать!</h1>
+        <p>Сайт по теории информации</p>
+        
+        <!-- Замените photo.jpg на имя вашего файла с фото -->
+        <div style="margin: 30px 0;">
+            <img src="photo_2026-11-03 13.42.06.jpeg" alt="Фото Ольги Шашко" class="profile-photo">
+        </div>
 
-    <div class="footer-banner">
-        Hosted Windows Virtual Server. 2.5GHz CPU, 2GB RAM, 60GB SSD. Try it now for $1!
-    </div>
+        <p>Студентка:</p>
+        <p style="font-size: 24px; font-weight: bold; margin-bottom: 15px;">Ольга Шашко</p>
+        
+        <p>Группа:</p>
+        <p style="font-size: 20px; font-weight: bold; margin-bottom: 40px;">1451</p>
 
-</body>
-</html>' на имя вашего файла с фото -->
-        <img src="photo.jpg" alt="Фото Ольги Шашко" class="profile-photo">
-        <h2 class="profile-name">Ольга Шашко</h2>
-    </div>
+        <!-- Ссылки на лабораторные (если у вас есть PDF файлы, загрузите их и поменяйте ссылки) -->
+        <div class="labs-list">
+            <p><a href="#">Лабораторная 1</a></p>
+            <p><a href="#">Лабораторная 2</a></p>
+            <p><a href="#">Лабораторная 3</a></p>
+            <p><a href="#">Лабораторная 4</a></p>
+            <p><a href="#">Handouts</a></p>
+        </div>
 
-    <div class="contact-info">
-        <h2>Мои данные</h2>
-        <ul>
-            <!-- Замените контакты на свои, если это необходимо -->
-            <li><a href="tel:+375293816829">+375 29 381-68-29</a></li>
-            <li><a href="mailto:annabklgva@gmail.com">annabklgva@gmail.com</a></li>
-            <li>tg: <a href="https://t.me/bklgva" target="_blank">@bklgva</a></li>
-        </ul>
-    </div>
-
-    <div class="footer-banner">
-        Hosted Windows Virtual Server. 2.5GHz CPU, 2GB RAM, 60GB SSD. Try it now for $1!
+        <!-- Подвал -->
+        <div class="footer">
+            <p>Web hosting by Somee.com</p>
+            <p>Hosted Windows Virtual Server. 2.5GHz CPU, 2GB RAM, 60GB SSD. Try it now for $1!</p>
+            <p>Web hosting by Somee.com</p>
+        </div>
     </div>
 
 </body>
