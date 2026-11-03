@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мера информации (Энтропия Шеннона)</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
+        .navbar { background-color: #ffffff; padding: 15px 30px; border-bottom: 1px solid #ddd; display: flex; gap: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .navbar a { text-decoration: none; color: #0056b3; font-weight: bold; font-size: 16px; }
+        .container { max-width: 700px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { font-size: 26px; margin-top: 0; margin-bottom: 20px; text-align: center; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
+        textarea { 
+            width: 100%; 
+            height: 120px; 
+            padding: 10px; 
+            font-size: 16px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            resize: vertical; 
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        button { 
+            display: block; 
+            width: 100%; 
+            padding: 12px; 
+            background-color: #0056b3; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #004494; }
+
+        /* Таблица результатов */
+        .result-section { margin-top: 30px; display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: #f8f9fa; font-weight: bold; color: #333; }
+        tr:nth-child(even) { background-color: #fcfcfc; }
+
+        .total-info { 
+            margin-top: 20px; 
+            padding: 15px; 
+            background: #e6f2f8; 
+            border-left: 5px solid #0056b3; 
+            border-radius: 4px; 
+            font-size: 18px;
+        }
+        
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #0056b3; text-decoration: none; font-weight: bold; }
+        .footer { margin-top: 40px; font-size: 13px; color: #999; border-top: 1px solid #eee; padding-top: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html">Главная</a>
+        <a href="#">Контакты</a>
+    </div>
+
+    <div class="container">
+        <h1>Мера информации</h1>
+        <p style="text-align: center; color: #666;">Вычисление энтропии и количества информации по формуле Шеннона</p>
+        
+        <div class="form-group">
+            <label for="text-input">Введите текст для анализа:</label>
+            <textarea id="text-input" placeholder="Например: Теория информации">привет мир</textarea>
+        </div>
+        
+        <button onclick="calculateInfo()">Рассчитать</button>
+
+        <div class="result-section" id="result-section">
+            <h3>Результаты анализа:</h3>
+            <table id="freq-table">
+                <thead>
+                    <tr>
+                        <th>Символ</th>
+                        <th>Кол-во</th>
+                        <th>Вероятность (p)</th>
+                        <th>Вклад в энтропию (-p·log₂p)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Заполняется через JS -->
+                </tbody>
+            </table>
+
+            <div class="total-info">
+                <p><strong>Энтропия (H):</strong> <span id="entropy-value">0</span> бит/символ</p>
+                <p><strong>Общее количество информации (I = H × N):</strong> <span id="total-info-value">0</span> бит</p>
+                <p style="font-size: 14px; color: #666; margin-bottom: 0;"><small>* N — общее количество символов в тексте.</small></p>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+
+        <div class="footer">
+            <p>Web hosting by Somee.com | Hosted Windows Virtual Server</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateInfo() {
+            const text = document.getElementById('text-input').value;
+            if (!text) {
+                alert("Пожалуйста, введите текст.");
+                return;
+            }
+
+            // Считаем частоту каждого символа
+            const freq = {};
+            for (let char of text) {
+                freq[char] = (freq[char] || 0) + 1;
+            }
+
+            const totalChars = text.length;
+            let entropy = 0;
+            let tableHtml = '';
+
+            // Сортируем по убыванию частоты для красоты
+            const sortedChars = Object.keys(freq).sort((a, b) => freq[b] - freq[a]);
+
+            for (let char of sortedChars) {
+                const count = freq[char];
+                const p = count / totalChars;
+                const pLogP = p * Math.log2(p); // log2 - логарифм по основанию 2
+                entropy -= pLogP;
+
+                // Красивое отображение пробела
+                const displayChar = char === ' ' ? '[Пробел]' : char;
+                
+                // Добавляем строку в таблицу
+                tableHtml += `
+                    <tr>
+                        <td><strong>${displayChar}</strong></td>
+                        <td>${count}</td>
+                        <td>${p.toFixed(4)}</td>
+                        <td>${(-pLogP).toFixed(4)}</td>
+                    </tr>
+                `;
+            }
+
+            const totalInfo = entropy * totalChars;
+
+            // Выводим результаты
+            document.querySelector('#freq-table tbody').innerHTML = tableHtml;
+            document.getElementById('entropy-value').textContent = entropy.toFixed(4);
+            document.getElementById('total-info-value').textContent = totalInfo.toFixed(4);
+            document.getElementById('result-section').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
