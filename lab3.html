@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Код Хэмминга (7,4)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #333333; }
+        .navbar { background-color: #f8f9fa; padding: 15px 30px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 20px; }
+        .navbar a { text-decoration: none; color: #0056b3; font-weight: bold; font-size: 16px; }
+        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        h1 { font-size: 28px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; font-size: 18px; }
+        input[type="text"] { padding: 8px; font-size: 16px; width: 200px; margin-left: 10px; letter-spacing: 2px; }
+        button { padding: 10px 20px; font-size: 16px; background-color: #e0e0e0; border: 1px solid #ccc; cursor: pointer; border-radius: 4px; margin-top: 10px; margin-right: 10px; }
+        button:hover { background-color: #d0d0d0; }
+        .result { margin-top: 30px; font-size: 18px; display: none; line-height: 1.6; }
+        .back-link { display: inline-block; margin-top: 40px; color: #0056b3; text-decoration: none; font-size: 16px; }
+        .footer { margin-top: 60px; font-size: 14px; color: #666; border-top: 1px solid #eee; padding-top: 20px; text-align: center; }
+        .highlight { color: #d9534f; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html">Главная</a>
+        <a href="#">Контакты</a>
+    </div>
+
+    <div class="container">
+        <h1>Код Хэмминга (7,4)</h1>
+        <p>Кодирование 4 бит данных в 7 бит и исправление одиночных ошибок.</p>
+        
+        <div class="form-group">
+            <label for="data">Введите 4 бита (например, 1011):</label>
+            <input type="text" id="data" maxlength="4" value="1011">
+        </div>
+        
+        <button onclick="encodeHamming()">Закодировать</button>
+        <button onclick="decodeHamming()" style="background-color: #d9edf7;">Декодировать / Исправить</button>
+
+        <div class="result" id="result-box">
+            <p><strong>Результат:</strong></p>
+            <div id="steps"></div>
+        </div>
+
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+
+        <div class="footer">
+            <p>Web hosting by Somee.com</p>
+            <p>Hosted Windows Virtual Server. 2.5GHz CPU, 2GB RAM, 60GB SSD. Try it now for $1!</p>
+        </div>
+    </div>
+
+    <script>
+        function encodeHamming() {
+            const input = document.getElementById('data').value;
+            if (input.length !== 4 || !/^[01]+$/.test(input)) {
+                alert("Пожалуйста, введите ровно 4 бита (только 0 и 1).");
+                return;
+            }
+
+            const d = input.split('').map(Number);
+            // Позиции: 1, 2, 3, 4, 5, 6, 7. Биты данных: 3, 5, 6, 7. Проверочные: 1, 2, 4.
+            // d = [d1, d2, d3, d4] -> биты в коде: p1, p2, d1, p4, d2, d3, d4
+            const p1 = d[0] ^ d[1] ^ d[3];
+            const p2 = d[0] ^ d[2] ^ d[3];
+            const p4 = d[1] ^ d[2] ^ d[3];
+
+            const hammingCode = `${p1}${p2}${d[0]}${p4}${d[1]}${d[2]}${d[3]}`;
+
+            document.getElementById('result-box').style.display = 'block';
+            document.getElementById('steps').innerHTML = `
+                Исходные данные: <b>${input}</b><br>
+                Проверочные биты: p1=${p1}, p2=${p2}, p4=${p4}<br>
+                <b>Закодированное слово:</b> <span style="color:#0056b3; font-size: 20px;">${hammingCode}</span>
+            `;
+            // Обновляем поле ввода для удобства декодирования
+            document.getElementById('data').value = hammingCode;
+            document.getElementById('data').maxLength = 7;
+        }
+
+        function decodeHamming() {
+            const input = document.getElementById('data').value;
+            if (input.length !== 7 || !/^[01]+$/.test(input)) {
+                alert("Для декодирования введите ровно 7 бит (только 0 и 1).");
+                return;
+            }
+
+            const h = input.split('').map(Number);
+            // Синдром
+            const s1 = h[0] ^ h[2] ^ h[4] ^ h[6];
+            const s2 = h[1] ^ h[2] ^ h[5] ^ h[6];
+            const s4 = h[3] ^ h[4] ^ h[5] ^ h[6];
+
+            // Определяем позицию ошибки (1-based index)
+            let errorPos = s1 * 1 + s2 * 2 + s4 * 4;
+            let message = "";
+
+            if (errorPos === 0) {
+                message = "<span style='color: green;'>Ошибок не обнаружено.</span>";
+            } else {
+                message = `Обнаружена ошибка в позиции: <span class="highlight">${errorPos}</span>`;
+                h[errorPos - 1] = h[errorPos - 1] ^ 1; // Инвертируем бит
+            }
+
+            const correctCode = h.join('');
+            // Извлекаем данные (позиции 3, 5, 6, 7 -> индексы 2, 4, 5, 6)
+            const dataBits = `${h[2]}${h[4]}${h[5]}${h[6]}`;
+
+            document.getElementById('result-box').style.display = 'block';
+            document.getElementById('steps').innerHTML = `
+                Введенный код: ${input}<br>
+                ${message}<br>
+                Исправленный код: <span style="color:#0056b3;">${correctCode}</span><br>
+                <b>Декодированные данные:</b> <span style="color: green; font-size: 20px;">${dataBits}</span>
+            `;
+            
+            // Сбрасываем поле для нового ввода
+            document.getElementById('data').value = dataBits;
+            document.getElementById('data').maxLength = 4;
+        }
+    </script>
+</body>
+</html>
